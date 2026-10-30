@@ -7,7 +7,7 @@ Base64 encoder and decoder written in zig.
 ## Progress
 
 - [x] Encoder
-- [ ] Decoder 🚧
+- [x] Decoder
 
 ## Got help from
 

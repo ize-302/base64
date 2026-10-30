@@ -4,10 +4,10 @@ const decoder = @import("./decoder.zig");
 fn expectDecoded(text: []const u8, expected: []const u8) !void {
     const gpa = std.testing.allocator;
 
-    var result = try decoder.Decode(gpa, text);
-    defer result.deinit(gpa);
+    const result = try decoder.Decode(gpa, text);
+    defer gpa.free(result);
 
-    try std.testing.expectEqualStrings(expected, result.items);
+    try std.testing.expectEqualStrings(expected, result);
 }
 
 // passes if Decode returns any error; frees the result if it unexpectedly succeeds
@@ -15,8 +15,8 @@ fn expectDecodeError(text: []const u8) !void {
     const gpa = std.testing.allocator;
 
     if (decoder.Decode(gpa, text)) |result| {
-        var r = result;
-        r.deinit(gpa);
+        const r = result;
+        defer gpa.free(r);
         return error.TestExpectedError;
     } else |_| {}
 }
